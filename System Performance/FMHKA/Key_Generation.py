@@ -37,14 +37,16 @@ if __name__ == '__main__':
     print(f'新生成的shared key：{key_compute(shared_key, test_loc, test_token)}，平均用时：{elapsed_time*1000:.7f}ms')
 
     ######### key recovering ##########
-    path_length=10
-    path_vecs=[]
-    for i in range(path_length):
-        path_vec={}
-        path_vec['loc']='00'+str(i)
-        path_vec['token']=generate_random_hex()
-        path_vecs.append(path_vec)
-    print('当前path_vecs：',path_vecs,'\n当前shared_key：'+shared_key)
-    elapsed_time = timeit.timeit(lambda: recover_key(shared_key,path_vecs), number=10000) / 10000 #将key_compute 运行了10000次
-    print(f'新生成的shared key：{recover_key(shared_key,path_vecs)}，平均用时：{elapsed_time*1000:.7f} ms')
+    for r in range(13):
+        path_length=r*5
+        path_vecs=[]
+        for i in range(path_length):
+            path_vec={}
+            path_vec['loc']='00'+str(i)
+            path_vec['token']=generate_random_hex()
+            path_vecs.append(path_vec)
+    # print('当前path_vecs：',path_vecs,'\n当前shared_key：'+shared_key)
+    
+        elapsed_time = timeit.timeit(lambda: recover_key(shared_key,path_vecs), number=10000) / 10000 #将key_compute 运行了10000次
+        print(f'r={r*5}, 新生成的shared key：{recover_key(shared_key,path_vecs)}，平均用时：{elapsed_time*1000:.7f} ms \n')
     recovered_key=recover_key(shared_key,path_vecs)
