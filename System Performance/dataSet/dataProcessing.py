@@ -50,6 +50,7 @@ with open(current_dir+'\\Email-EuAll.txt', 'r') as file:
         add_email(int(from_node), int(to_node))
 
 # 举例输出用户0的信息
-print(users[0])
-# 打印用户0收到邮件的用户列表
-print(users[0].received_emails_from)
+if __name__ == "__main__":
+    print(users[0])
+    # 打印用户0收到邮件的用户列表
+    print(users[0].received_emails_from)
