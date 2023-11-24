@@ -2,7 +2,7 @@
 ## Author: Ming
 ## Created: 2023/11/7
 ## Discription
-##
+## This code is used for generating the enchmark data dissemination network built from the dataset (265,214 nodes and 420,045 forwarding edges)
 ######################################################
 import os
 import sys

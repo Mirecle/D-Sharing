@@ -18,3 +18,5 @@ def get_lighter_color(color):
     lighter_rgb = tuple(min(255, int(c + (255 - c) * 0.7)) for c in rgb)
     # 将RGB转换回hex
     return '#%02x%02x%02x' % lighter_rgb
+
+print(get_random_color())

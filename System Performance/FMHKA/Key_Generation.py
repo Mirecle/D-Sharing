@@ -1,3 +1,9 @@
+######################################################
+## Author: Ming
+## Created: 2023/11/7
+## Discription
+## This code is for simulating the key generation of FMHKA
+######################################################
 import hashlib
 import random
 import time
