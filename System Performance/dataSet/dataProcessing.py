@@ -24,7 +24,7 @@ logging.basicConfig(filename=current_dir+'\\example.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 # 拼接新的路径
 def load_latest_data():
-    all_files = sorted(glob.glob(os.path.join(current_dir, "process_tree_*")), 
+    all_files = sorted(glob.glob(os.path.join(current_dir, "tested_tree_*")), 
                        key=os.path.getmtime, reverse=True)
     for file in all_files:
         try:
@@ -80,13 +80,13 @@ def generate_filename(base_name):
     return f"{base_name}_{timestamp}"
 
 def save_data(trees, edge, users):
-    sys.setrecursionlimit(10000) 
-    filename = generate_filename("process_tree")
+    sys.setrecursionlimit(20000) 
+    filename = generate_filename("tested_tree_")
     with open(os.path.join(current_dir, filename), 'wb') as f:
         pickle.dump((trees, edge, users), f)
 
     # 保留最近10个文件
-    all_files = sorted(glob.glob(os.path.join(current_dir, "process_tree_*")), 
+    all_files = sorted(glob.glob(os.path.join(current_dir, "tested_tree_*")), 
                        key=os.path.getmtime, reverse=True)
     for old_file in all_files[10:]:
         os.remove(old_file)
@@ -98,7 +98,7 @@ def save_data(trees, edge, users):
 
 # 从文件中加载session对象
 def load_tree_from_file():
-    with open(current_dir+'\\process_tree', 'rb') as f:
+    with open(current_dir+'\\tested_tree', 'rb') as f:
         trees,edge,users = pickle.load(f)
     return trees
 
@@ -121,13 +121,13 @@ try:
     trees,edge,users=load_latest_data()
 
 except Exception as e:
-    with open(current_dir+'\\Email-EuAll.txt', 'r') as file:
+    with open(current_dir+'\\part_dataset\\result-4000.txt', 'r') as file:
         for line in file:
             # 跳过注释行
             if line.startswith('#'):
                 continue
 
-            parts = line.strip().split('\t')
+            parts = line.strip().split(' ')#'\t' for Email-EuAll.txt
             if len(parts) != 2:
                 continue  # 忽略格式不正确的行
 
