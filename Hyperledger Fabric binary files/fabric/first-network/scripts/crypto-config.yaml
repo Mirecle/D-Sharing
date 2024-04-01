@@ -1,0 +1,15 @@
+OrdererOrgs:
+- Name: Orderer
+  Domain: example.com
+  Specs:
+    - Hostname: localhost
+PeerOrgs:
+- Name: Org1
+  Domain: org1.example.com
+  EnableNodeOUs: true
+  Specs:
+    - Hostname: localhost
+    
+    
+  Users:
+    Count: 1

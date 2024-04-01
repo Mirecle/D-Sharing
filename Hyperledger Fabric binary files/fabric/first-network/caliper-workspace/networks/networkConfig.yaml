@@ -1,0 +1,105 @@
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# 
+
+name: Fabric
+version: "1.0"
+mutual-tls: false
+
+caliper:
+  blockchain: fabric
+#  command:
+#    start: export FABRIC_VERSION=1.4.0;docker-compose -f networks/fabric/docker-compose/2org1peergoleveldb/docker-compose.yaml up -d;sleep 3s
+#    end: docker-compose -f networks/fabric/docker-compose/2org1peergoleveldb/docker-compose.yaml down;(test -z \"$(docker ps -aq)\") || docker rm $(docker ps -aq);(test -z \"$(docker images dev* -q)\") || docker rmi $(docker images dev* -q);rm -rf /tmp/hfc-*
+#这里的command注释掉就不会启动docker
+                                                                                                        
+                                                                                                        
+info:
+  Version: 1.4.0
+  Size: 1 Orgs with 1 Peer
+  Orderer: Solo,
+  Distribution: Single Host
+  StateDB: GoLevelDB
+
+clients:
+  client0.org1.example.com:
+    client:
+      organization: Org1
+      credentialStore:
+        path: /tmp/hfc-kvs/org1
+        cryptoStore:
+          path: /tmp/hfc-cvs/org1
+      clientPrivateKey:
+        path: ../scripts/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/keystore/4b2409846c1e99db870b1f048da434a3c220feceaab2d1f650ec287375a97d46_sk
+      clientSignedCert:
+        path: ../scripts/crypto-config/peerOrganizations/org1.example.com/users/User1@org1.example.com/msp/signcerts/User1@org1.example.com-cert.pem
+#具体路径需要根据测试的项目更改，fastfabric生成的证书等路径在这
+
+
+channels:
+  channel:
+    configBinary: ../scripts/channel-artifacts/channel.tx   #生成的通道文件
+    created: false
+    orderers:
+    - ordererOrganizations
+    peers:
+      peerOrganizations:
+        eventSource: true
+    chaincodes:
+#    - id: marbles
+#      version: v0
+#      language: golang
+#      path: fabric/samples/marbles/go
+#      metadataPath: src/fabric/samples/marbles/go/metadata
+#    - id: drm
+#      version: v0
+#      language: golang
+#      path: fabric/scenario/drm/go
+#    - id: simple
+#      version: v0
+#      language: golang
+#      path: fabric/scenario/simple/go
+#    - id: smallbank
+#      version: v0
+#      language: golang
+#      path: fabric/scenario/smallbank/go
+    - id: chaincode     
+      version: v0
+      language: golang
+      path: ../chaincode/abac/chaincode_example02.go   #链码文件地址
+
+organizations:
+  Org1:
+    mspid: Org1MSP
+    peers:
+    - peerOrganizations
+#    certificateAuthorities:
+#    - ca.org1.example.com
+    adminPrivateKey:
+      path: ../scripts/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/2306137143f205bed49cfd4634f58a9f19be52f3f313737b30059263411bddac_sk
+    signedCert:
+      path: ../scripts/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
+
+orderers:
+  ordererOrganizations:
+    url: grpc://localhost:7050
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+#      ssl-target-name-override: orderer.example.com
+
+peers:
+  peerOrganizations:
+    url: grpc://localhost:7051
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      grpc.keepalive_time_ms: 600000

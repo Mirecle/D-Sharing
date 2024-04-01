@@ -1,0 +1,5 @@
+
+The totalTransactions = 100 The tps = 47.415836889521096
+The totalTransactions = 400 The tps = 53.071513864932996
+The totalTransactions = 10000 The tps = 56.88055651936499
+The totalTransactions = 10000 The tps = 88.35092989353713
