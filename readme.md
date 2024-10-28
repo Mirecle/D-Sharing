@@ -34,9 +34,9 @@ This project code consists of four parts:
 3. Hyperledger Fabric binary files
 4. Performance Assessment
 
-We will go through the details in the following sections.
+In this section, a general framework will be given, and more implementation details will be available after the acceptance of the paper.
 ## 1.Smart Contract
-In this section, we provide a detailed implementation of the control framework for anonymous data sharing in Go language. The framework consists of four main parts: data upload, data authorization, permission update, and permission revocation.
+We implement the control framework for anonymous data sharing in Go language. The framework consists of four main parts: data upload, data authorization, permission update, and permission revocation.
 
 **Preparation phase**
 We use the examples provided by Fabric's Fabric samples to illustrate and modify the following code in the first network/scripts/script.sh script:
@@ -145,44 +145,7 @@ peer chaincode instantiate -o orderer.example.com:7050 --tls --cafile $ORDERER_C
 -c: Parameters specified when instantiating chain codes
 -P: Specify endorsement strategy
 ```
-**Execution of commands**
-The client initiates a transaction to make changes to the ledger data, and the endorsed transaction needs to be sent to the sorting node on the chain. Therefore, it is necessary to enable TLS verification and specify the corresponding orderer certificate path.
 
-1. ShareInitiation
-
-Require: Call method name,owner,data_Hash,root_Key,share_Key ,token,address ,location
-```shell
-peer chaincode invoke -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["ShareInitiation","Acc1", "datahash00001", "rkeyV1","skeyV1","token00001","address00001","loc00001"]}'
-```
-```shell
--o: Specify the orderer node address
---Tls: Enable TLS verification
---Cafile: specifies the root certificate path of the Orderer, used to verify TLS handshake
--n: Specify chain code name
--C: Specify channel name
--c: Specify the required parameters for calling the chain code
-```
-
-2. ShareDissemination
-
-Require: Call method name,owner,data_Hash,root_Key,token,address,loc,Original_owner
-```shell
-peer chaincode invoke -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["ShareDissemination","SU2", "datahash00001", "rootkey","token00002","address00002","loc00002","Acc1"]}'
-```
-
-3. ShareUpdate
-
-Require: Call method name,Original_owner,data_Hash
-```shell
-peer chaincode invoke -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["ShareUpdate","Acc1", "datahash00001"]}'
-```
-
-4. ShareRevocation
-
-Require: Call method name,Original_owner,data_Hash
-```shell
-peer chaincode invoke -C ${CHANNEL} -n ${CHAINCODE} -c '{"Args":["ShareRevocation", "datahash00001", "Acc1"]}'
-```
 ## 2.Zero knowledge proof for three operating systems
 ### 2.1 Windows
 The zero knowledge proof code on the Windows side is entirely written in Golang language and can run normally on operating systems with a go environment.
